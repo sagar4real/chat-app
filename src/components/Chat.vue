@@ -7,10 +7,10 @@
       <div class="card">
   <div class="card-body">
     <ul class="messages">
-        <li>
-            <span class="name">Name</span>
-            <span class="message">Message</span>
-            <span class="time">Time</span>
+        <li v-for="message in messages " :key="message.id">
+            <span class="name">{{message.name}}:</span>
+            <span class="message">{{message.content}}</span>
+            <span class="time">{{message.time}}</span>
         </li>
     </ul>
   </div>
@@ -24,18 +24,36 @@
 
 <script>
 import NewMessage from'@/components/Newmessage'
-import Newmessage from './Newmessage.vue'
+import db from'@/firebase/init'
+import moment from'moment'
+
 export default {
 name:'Chat',
 props:['name'],
 data(){
     return{
-
+    messages:[]
     }
 },
 components:{
     NewMessage
-}    
+},
+created(){
+    let ref=db.collection('message').orderBy('time');
+    ref.onSnapshot(snapShot=>{
+    snapShot.docChanges().forEach(change=>{
+        if(change.type=='added'){
+            let doc=change.doc
+            this.messages.push({
+                id:doc.id,
+                name:doc.data().name,
+                content:doc.data().content,
+                time:moment(doc.data().time).format('lll'),
+            })
+        }
+    })
+    })
+}  
 }
 </script>
 
@@ -57,12 +75,14 @@ components:{
 }
 .time{
     display:block;
+    font-size:0.8rem;
 }
 .name{
     color:#045762;
 }
 .message{
     color:#65d6ce;
+    overflow: auto;
 }
 .card-footer{
     border-top:none;
