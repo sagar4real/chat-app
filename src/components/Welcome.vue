@@ -8,6 +8,7 @@
   <div class="mb-3 ">
     <label for="exampleInputEmail1" class="form-label">Enter Your Name</label>
     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="name">
+    <h5 class=" text-danger">{{feedback}}</h5>
   </div>
   <button type="submit" class="btn btn-primary ">ENTER CHAT</button>
 </form>
@@ -23,12 +24,17 @@ export default {
   data () {
     return {
     name:null,
+    feedback:null
     }
   },
   methods:{
     enterChat(){
-      console.log(this.name);
-      this.name=null;
+     if(this.name){
+     this.$router.push({name:'Chat',params:{name:this.name}})
+     }
+     else{
+      this.feedback="you must enter your name to begin chat"
+     }
     }
   }
 }
