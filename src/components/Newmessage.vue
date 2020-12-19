@@ -4,7 +4,7 @@
 <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Enter Your Message</label>
     <input type="text" class="form-control" id="exampleInputEmail1" v-model="message">
-    <p class="lead text-danger">{{feedback}}</p>
+    <p v-if="feedback" class="lead text-danger">{{feedback}}</p>
   </div>
      </form>
     </div>
@@ -24,16 +24,14 @@ export default {
     },
     methods:{
         addmessage(){
-            if(this.message){
-              db.collection('message').add({
-                  content:this.message,
-                  name:this.name,
-                  time:Date.now(),
-              }).catch(err=>{
-                  console.log(err);
-              })
-              this.message=null
-            }
+              if(this.message){
+          db.collection('message').add({
+              name:this.name,
+              content:this.message,
+              time:Date.now()
+          })
+          this.message=null;
+        }
             else{
                this.feedback="you must enter the msg to chat";
             }

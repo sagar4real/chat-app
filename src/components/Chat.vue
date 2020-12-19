@@ -6,7 +6,7 @@
       </div>
       <div class="card">
   <div class="card-body">
-    <ul class="messages">
+    <ul class="messages" v-chat-scroll>
         <li v-for="message in messages " :key="message.id">
             <span class="name">{{message.name}}:</span>
             <span class="message">{{message.content}}</span>
@@ -80,7 +80,8 @@ created(){
 .name{
     color:#045762;
 }
-.message{
+.messages{
+    max-height:300px;
     color:#65d6ce;
     overflow: auto;
 }
